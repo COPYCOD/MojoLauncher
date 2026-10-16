@@ -309,7 +309,7 @@ public class MoJsonDownloader extends Downloader {
         }
 
         JAssets assets = downloadAssetsIndex(verInfo);
-        if(assets != null) scheduleAssetDownloads(assets);
+        if(assets != null) scheduleAssetDownloads(assets, verInfo.assets);
 
         ClientInfo clientInfo = getClientInfo(verInfo);
         if(clientInfo != null) scheduleGameJarDownload(clientInfo, versionName);
@@ -439,7 +439,7 @@ public class MoJsonDownloader extends Downloader {
         submitBareLibrary(path, baseUrl);
     }
 
-    private void preCreateAssetDirs(String basePath) throws PresentableException {
+    private void preCreateAssetDirs(File basePath) throws PresentableException {
         char[] chars = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
         for (char a : chars) {
             for (char b : chars) {
@@ -448,36 +448,38 @@ public class MoJsonDownloader extends Downloader {
         }
     }
 
-    private void scheduleAssetDownloads(JAssets assets) throws PresentableException {
-        Map<String, JAssetInfo> assetObjects = assets.objects;
-        if(assetObjects == null) return;
-        Set<String> assetNames = assetObjects.keySet();
-        growDownloadList(assetNames.size());
-        String basePath = assets.mapToResources ? Tools.OBSOLETE_RESOURCES_PATH : Tools.ASSETS_PATH;
-        boolean requiresSubdirs = true;
+    private File getAssetsBasePath(JAssets assets, String indexName) {
+        if(assets.virtual) return new File(Tools.ASSETS_PATH, "virtual/"+indexName);
+        // TODO: Do this correctly. resources/ should be in the game's CWD
+        else if(assets.mapToResources) return new File(Tools.OBSOLETE_RESOURCES_PATH);
+        else return new File(Tools.ASSETS_PATH, "objects/");
+    }
 
-        if(!assets.virtual && !assets.mapToResources) {
-            preCreateAssetDirs(basePath);
-            requiresSubdirs = false;
-        }
+    private void scheduleAssetDownloads(JAssets assets, String indexName) throws PresentableException {
+        if(assets.objects == null) return;
+        Set<Map.Entry<String, JAssetInfo>> assetObjects = assets.objects.entrySet();
+        growDownloadList(assetObjects.size());
+        File basePath = getAssetsBasePath(assets, indexName);
+        boolean hashed = !assets.virtual && !assets.mapToResources;
 
-        for(String asset : assetNames) {
-            JAssetInfo assetInfo = assetObjects.get(asset);
-            if(assetInfo == null) continue;
-            File targetFile;
+        if(hashed) preCreateAssetDirs(basePath);
+
+        for(Map.Entry<String, JAssetInfo> asset : assetObjects) {
+            JAssetInfo assetInfo = asset.getValue();
+            if(assetInfo == null) {
+                continue;
+            }
+
             String hashedPath = new StringBuilder(3 + assetInfo.hash.length())
                     .append(assetInfo.hash.substring(0, 2))
                     .append(File.separator)
                     .append(assetInfo.hash)
                     .toString();
 
-            if(assets.virtual || assets.mapToResources) {
-                targetFile = new File(basePath, asset);
-            } else {
-                targetFile = new File(basePath, "objects" + File.separator + hashedPath);
-            }
+            File targetFile = hashed ? new File(basePath, hashedPath) : new File(basePath, asset.getKey());
+
             scheduleDownload(targetFile,
-                    requiresSubdirs,
+                    !hashed,
                     DownloadMirror.DOWNLOAD_CLASS_ASSETS,
                     MC_RES + hashedPath,
                     assetInfo.hash,
