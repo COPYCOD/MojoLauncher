@@ -3,6 +3,7 @@ package git.artdeell.mojo.utils;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.os.Build;
+import android.util.Base64;
 
 import androidx.annotation.RequiresApi;
 
@@ -14,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -52,6 +54,18 @@ public class HashUtils {
     public static byte[] fileHash(MessageDigest messageDigest, File f) throws IOException {
         if (SDK_INT >= Build.VERSION_CODES.O) return fileHashNio(messageDigest, f.toPath());
         else return fileHashLegacy(messageDigest, f);
+    }
+
+    public static String longHash(String source) {
+        try {
+            byte[] stringBytes = source.getBytes(StandardCharsets.UTF_8);
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.update(stringBytes);
+            byte[] hashBytes = digest.digest();
+            return Base64.encodeToString(hashBytes, Base64.NO_PADDING | Base64.URL_SAFE | Base64.NO_WRAP);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("WTF? SHA-1 digest missing!", e);
+        }
     }
 
     public static boolean compareSHA1(File f, String sourceSHA) throws IOException{
