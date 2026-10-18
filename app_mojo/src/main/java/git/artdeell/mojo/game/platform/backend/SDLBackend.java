@@ -24,7 +24,12 @@ public class SDLBackend implements PlatformBackend {
                 Platform.setCursor(cursor.getBitmap(), cursor.getXhot(), cursor.getYhot());
             else Platform.setCursor(null, 0, 0);
         });
-        SDLActivity.setCursorWarpCallback(Platform::setCursorPosition);
+        SDLActivity.setCursorWarpCallback((x, y) ->{
+            Platform.setCursorPosition(x, y);
+            // Avoid sending a huge delta after the cursor warps
+            prevX = Platform.cursorX;
+            prevY = Platform.cursorY;
+        });
     }
 
     private static void handleGrabStateChange(boolean isGrabbing) {
