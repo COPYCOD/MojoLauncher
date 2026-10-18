@@ -21,29 +21,14 @@ import java.io.IOException;
 import java.util.List;
 
 public class RTRecyclerViewAdapter extends PickerRecyclerView<RTRecyclerViewAdapter.RTViewHolder> {
-    public RTRecyclerViewAdapter(PickerDialog dialog) {
-        super(dialog);
-    }
-
-    @Override
+    public RTRecyclerViewAdapter(PickerDialog dialog) { super(dialog); }
     public void onBindViewHolder(@NonNull RTViewHolder holder, int position) {
         final List<Runtime> runtimes = MultiRTUtils.getRuntimes();
         holder.bind(runtimes.get(position),position);
     }
-
-    @Override
-    protected RTViewHolder abstractHolder(View recyclableView) {
-        return new RTViewHolder(recyclableView);
-    }
-
-    @Override
-    public int getItemCount() {
-        return MultiRTUtils.getRuntimes().size();
-    }
-
-    public boolean isDefaultRuntime(Runtime rt) {
-        return LauncherPreferences.PREF_DEFAULT_RUNTIME.equals(rt.name);
-    }
+    protected RTViewHolder abstractHolder(View recyclableView) { return new RTViewHolder(recyclableView); }
+    public int getItemCount() { return MultiRTUtils.getRuntimes().size(); }
+    public boolean isDefaultRuntime(Runtime rt) { return LauncherPreferences.PREF_DEFAULT_RUNTIME.equals(rt.name); }
 
     @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
     public void setDefault(Runtime rt){

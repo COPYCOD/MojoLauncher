@@ -26,15 +26,11 @@ public class DriverViewAdapter extends PickerRecyclerView<DriverViewAdapter.Driv
     public DriverViewAdapter(DriverConfigDialog dialog) {
         super(dialog);
     }
-
     @NonNull
-    @Override
     public DriverViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picker_dialog,parent,false);
         return new DriverViewHolder(recyclableView);
     }
-
-    @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
         // Always bind the default driver first
         if(position == 0)
@@ -44,27 +40,18 @@ public class DriverViewAdapter extends PickerRecyclerView<DriverViewAdapter.Driv
             holder.bind(drivers.get(position - 1), position);
         }
     }
-
-    @Override
-    public int getItemCount() {
-        return DriverManager.getDriverPaths().size() + 1; // this may!! throw null if not adreno, but we init this view only if adreno anyway
-    }
-
-    @Override
+    public int getItemCount() { return DriverManager.getDriverPaths().size() + 1; }
     protected DriverViewHolder abstractHolder(View recyclableView) {
         return new DriverViewHolder(recyclableView);
     }
-
     public boolean isDefault(Driver driver) {
         return DriverManager.isPreferredDriver(driver);
     }
-
     @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
     public void setDefault(Driver driver){
         DriverManager.setPreferredDriver(driver);
         notifyDataSetChanged();
     }
-
 
     public class DriverViewHolder extends PickerRecyclerView.AbstractHolder<String> {
         Driver mCurrentDriver;
