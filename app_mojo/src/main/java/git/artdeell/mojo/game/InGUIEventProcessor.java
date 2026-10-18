@@ -5,7 +5,6 @@ import android.view.View;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.input.mouse.LeftClickGesture;
-import git.artdeell.mojo.input.mouse.PointerTracker;
 import git.artdeell.mojo.input.mouse.Scroller;
 import git.artdeell.mojo.input.mouse.TapDetector;
 import git.artdeell.mojo.prefs.LauncherPreferences;
@@ -15,8 +14,6 @@ import git.artdeell.mojo.CallbackBridge;
 public class InGUIEventProcessor extends TouchEventProcessor {
     public static final float FINGER_SCROLL_THRESHOLD = Tools.dpToPx(6);
     public static final float FINGER_STILL_THRESHOLD = Tools.dpToPx(5);
-
-    private final PointerTracker mTracker = new PointerTracker();
     private final TapDetector mSingleTapDetector;
     private View mTouchpad;
     private boolean mIsMouseDown = false;
@@ -115,7 +112,8 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     }
 
     @Override
-    public void cancelPendingActions() {
+    public void prepareForSwitching() {
+        super.prepareForSwitching();
         mScroller.resetScrollOvershoot();
         if(mIsMouseDown) disableMouse();
     }
