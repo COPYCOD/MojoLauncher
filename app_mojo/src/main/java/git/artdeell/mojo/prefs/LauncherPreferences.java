@@ -16,6 +16,7 @@ import git.artdeell.mojo.*;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.multirt.MultiRTUtils;
+import git.artdeell.mojo.utils.GpuUtils;
 import git.artdeell.mojo.utils.JREUtils;
 
 import java.io.IOException;
@@ -114,7 +115,7 @@ public class LauncherPreferences {
         PREF_DUMP_SHADERS = DEFAULT_PREF.getBoolean("dump_shaders", false);
         PREF_DEADZONE_SCALE = ((float) DEFAULT_PREF.getInt("gamepad_deadzone_scale", 100))/100f;
         PREF_BIG_CORE_AFFINITY = DEFAULT_PREF.getBoolean("bigCoreAffinity", false);
-        PREF_ZINK_PREFER_SYSTEM_DRIVER = DEFAULT_PREF.getBoolean("zinkPreferSystemDriver", false);
+        PREF_ZINK_PREFER_SYSTEM_DRIVER = DEFAULT_PREF.getBoolean("zinkPreferSystemDriver", !hasVulkanDrivers());
         PREF_DOWNLOAD_SOURCE = DEFAULT_PREF.getString("downloadSource", "default");
         PREF_VERIFY_MANIFEST = DEFAULT_PREF.getBoolean("verifyManifest", true);
         PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = DEFAULT_PREF.getBoolean(PREF_KEY_SKIP_NOTIFICATION_CHECK, false);
@@ -228,5 +229,9 @@ public class LauncherPreferences {
             Log.i("NOTCH DETECTION", "No notch detected, or the device if in split screen mode");
             return false;
         }
+    }
+
+    public static boolean hasVulkanDrivers() {
+        return GpuUtils.getGlInfo().isAdreno();
     }
 }
