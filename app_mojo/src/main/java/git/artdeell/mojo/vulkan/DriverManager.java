@@ -6,12 +6,11 @@ import android.util.Log;
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.prefs.LauncherPreferences;
+import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.ZipUtils;
 import git.artdeell.mojo.vulkan.driver.AdrenoDriver;
 import git.artdeell.mojo.vulkan.driver.BuiltinDriver;
 import git.artdeell.mojo.vulkan.driver.Driver;
-
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -210,19 +209,20 @@ public class DriverManager {
      * Checks if the driver package is valid in the provided input stream. The only things checked are zip file consistency and metadata file presence.
      * Might be slow because it searches the whole stream for metadata
      * @param stream An input stream containing a zip data
-     * @return if the provided stream contains a valid package
+     * @return driver hash if valid or null if invalid
      */
-    public static boolean validateDriver(InputStream stream){
+    public static String validateDriver(InputStream stream){
         ZipInputStream zip = new ZipInputStream(stream);
         try{
             ZipEntry entry;
             do {
                 entry = zip.getNextEntry();
-                if(entry == null) break;
-            } while(!entry.getName().equals("meta.json"));
-            return entry != null;
+            } while(entry != null && !entry.getName().equals(METADATA_FILENAME));
+            AdrenoDriver driver;
+            if(entry == null || (driver = AdrenoDriver.fromJson(zip)) == null) return null;
+            return driver.getHash();
         } catch (IOException e) {
-            return false;
+            return null;
         }
     }
 
@@ -256,6 +256,28 @@ public class DriverManager {
         }
     }
 
+    static void installDriverContent(String hash, InputStream is, boolean overwrite){
+        ensureRootExists();
+        try(ZipInputStream zis = new ZipInputStream(is)){
+            if(driverExists(hash)){
+                if(!overwrite) {
+                    Log.w(TAG, "Driver package already installed and overwrite is not requested");
+                    return;
+                }
+                else {
+                    removeDriver(hash);
+                }
+            }
+            File installPath = new File(packagesPath, hash);
+            FileUtils.ensureDirectory(installPath);
+            ZipUtils.zipStreamExtract(zis, installPath);
+            Log.i(TAG, "Installed driver package " + hash + " into " + installPath.getAbsolutePath());
+            loadDriver(hash);
+        } catch (Exception e) {
+            Log.e(TAG, "Malformed driver package file");
+        }
+    }
+
     /**
      * Removes a driver by its name (hash)
      * @param name A driver hash
@@ -268,7 +290,7 @@ public class DriverManager {
         if (!path.isDirectory())
             return false;
         try {
-            FileUtils.deleteDirectory(path);
+            org.apache.commons.io.FileUtils.deleteDirectory(path);
             setPreferredDriver(null);
             return true;
         } catch (IOException e) {
