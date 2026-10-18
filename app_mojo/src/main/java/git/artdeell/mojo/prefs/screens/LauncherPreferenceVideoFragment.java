@@ -79,20 +79,17 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
 
         Preference drivers = requirePreference("manageDrivers");
+        drivers.setOnPreferenceClickListener(pref -> {
+            openDriverDialog();
+            return true;
+        });
         SwitchPreferenceCompat customVk = requirePreference("zinkPreferSystemDriver", SwitchPreferenceCompat.class);
         boolean gplay = BuildConfig.BUILD_TYPE.equals("gplay");
         boolean isAdreno = GpuUtils.getGlInfo().isAdreno();
         boolean hasSupport = DriverManager.isSupportedByDevice();
         customVk.setVisible(hasSupport && (!gplay || isAdreno));
         customVk.setChecked(LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER);
-        if(!gplay && hasSupport) {
-            drivers.setVisible(true);
-            updateDriversPref();
-            drivers.setOnPreferenceClickListener(pref -> {
-                openDriverDialog();
-                return true;
-            });
-        } else drivers.setVisible(false);
+
         computeVisibility();
     }
 
@@ -114,6 +111,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     private void computeVisibility(){
         requirePreference("force_vsync", SwitchPreferenceCompat.class)
                 .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+        updateDriversPref();
     }
 
     private void openDriverDialog(){
@@ -125,11 +123,19 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         mDialogScreen.show();
     }
     private void updateDriversPref(){
+
         Preference preference = requirePreference("manageDrivers");
+        boolean hasSupport = DriverManager.isSupportedByDevice();
+        boolean gplay = BuildConfig.BUILD_TYPE.equals("gplay");
+        if(LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER || gplay || !hasSupport){
+            preference.setVisible(false);
+            return;
+        }
         Driver driver = DriverManager.getPreferredDriver();
         if(driver.isDefault())
             preference.setSummary(R.string.driver_default_name);
         else
             preference.setSummary(driver.getName());
+        preference.setVisible(true);
     }
 }
