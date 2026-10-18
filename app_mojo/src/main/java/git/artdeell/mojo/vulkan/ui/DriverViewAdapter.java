@@ -98,7 +98,7 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
                 Log.w(DriverManager.TAG, "Driver " + driverPath + " is corrupted");
                 mNameTextView.setText("");
                 mExtraNameTextView.setText(R.string.driver_config_corrupted);
-                mExtraNameTextView.setTextColor(Color.parseColor("#FF0000"));
+                mExtraNameTextView.setTextColor(Color.RED);
                 mSetDefaultButton.setEnabled(false);
                 mSetDefaultButton.setVisibility(View.GONE);
             } else {
