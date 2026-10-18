@@ -1,4 +1,4 @@
-package git.artdeell.mojo.dialogs.picker;
+package git.artdeell.mojo.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -9,9 +9,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import git.artdeell.mojo.dialogs.EditAdapter;
-
-public abstract class PickerDialog {
+public abstract class PackageSelector {
     protected AlertDialog mDialog;
     protected RecyclerView mDialogView;
     protected EditAdapter mAdapter;
@@ -30,7 +28,7 @@ public abstract class PickerDialog {
     public void prepare(Context context, ActivityResultLauncher<Object> launcher) {
         mDialogView = new RecyclerView(context);
         mDialogView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        PickerRecyclerView<?> adapter = createAdapter(context, this);
+        PackageAdapter<?> adapter = createAdapter(context, this);
         mDialogView.setAdapter(adapter);
         mAdapter = adapter;
 
@@ -63,6 +61,6 @@ public abstract class PickerDialog {
     protected abstract int getPositiveButtonText();
     protected abstract int getNeutralButtonText();
     protected abstract int getEditingButtonLabel();
-    protected abstract PickerRecyclerView<?> createAdapter(Context context, PickerDialog dialog);
+    protected abstract PackageAdapter<?> createAdapter(Context context, PackageSelector dialog);
     protected abstract void onPositive(Context context, ActivityResultLauncher<Object> launcher);
 }

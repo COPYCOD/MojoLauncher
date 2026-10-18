@@ -12,16 +12,15 @@ import androidx.appcompat.app.AlertDialog;
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.dialogs.EditAdapter;
-import git.artdeell.mojo.dialogs.picker.PickerDialog;
-import git.artdeell.mojo.dialogs.picker.PickerRecyclerView;
+import git.artdeell.mojo.dialogs.PackageSelector;
+import git.artdeell.mojo.dialogs.PackageAdapter;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 
 import java.io.IOException;
 import java.util.List;
 
-public class RTRecyclerViewAdapter extends PickerRecyclerView<RTRecyclerViewAdapter.RTViewHolder> {
-    public RTRecyclerViewAdapter(PickerDialog dialog) { super(dialog); }
+public class RTRecyclerViewAdapter extends PackageAdapter<RTRecyclerViewAdapter.RTViewHolder> {
+    public RTRecyclerViewAdapter(PackageSelector dialog) { super(dialog); }
     public void onBindViewHolder(@NonNull RTViewHolder holder, int position) {
         final List<Runtime> runtimes = MultiRTUtils.getRuntimes();
         holder.bind(runtimes.get(position),position);

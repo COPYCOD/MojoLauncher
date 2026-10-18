@@ -8,7 +8,7 @@
     >
 
     <TextView
-        android:id="@+id/picker_ext_name"
+        android:id="@+id/selector_view_ext_name"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,15 +17,15 @@
 
         android:textSize="@dimen/_10ssp"
 
-        app:layout_constraintStart_toStartOf="@+id/picker_view_name"
-        app:layout_constraintTop_toBottomOf="@+id/picker_view_name"
+        app:layout_constraintStart_toStartOf="@+id/selector_view_name"
+        app:layout_constraintTop_toBottomOf="@+id/selector_view_name"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
         tools:text="Blabla" />
 
     <TextView
-        android:id="@+id/picker_view_name"
+        android:id="@+id/selector_view_name"
         style="@style/TextAppearance.AppCompat.Body1"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         tools:text="Blabla" />
 
     <ImageButton
-        android:id="@+id/picker_view_removebtn"
+        android:id="@+id/selector_view_removebtn"
         android:layout_width="@dimen/_35sdp"
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackground"
@@ -56,23 +56,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.654"
-        app:layout_constraintStart_toEndOf="@+id/picker_view_name"
+        app:layout_constraintStart_toEndOf="@+id/selector_view_name"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/picker_view_setdefaultbtn"
+        android:id="@+id/selector_view_setdefaultbtn"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
 
         android:background="?attr/selectableItemBackground"
-        android:text="@string/multirt_config_setdefault"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toEndOf="@+id/picker_view_name"
+        app:layout_constraintStart_toEndOf="@+id/selector_view_name"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:visibility="visible" />

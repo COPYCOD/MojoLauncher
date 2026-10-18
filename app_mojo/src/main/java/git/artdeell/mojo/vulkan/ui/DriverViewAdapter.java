@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import git.artdeell.mojo.dialogs.picker.PickerRecyclerView;
+import git.artdeell.mojo.dialogs.PackageAdapter;
 import git.artdeell.mojo.vulkan.driver.AdrenoDriver;
 import git.artdeell.mojo.vulkan.DriverManager;
 import git.artdeell.mojo.vulkan.driver.Driver;
@@ -22,13 +22,13 @@ import git.artdeell.mojo.R;
 
 import java.util.List;
 
-public class DriverViewAdapter extends PickerRecyclerView<DriverViewAdapter.DriverViewHolder> {
+public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverViewHolder> {
     public DriverViewAdapter(DriverConfigDialog dialog) {
         super(dialog);
     }
     @NonNull
     public DriverViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picker_dialog,parent,false);
+        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_package_selector,parent,false);
         return new DriverViewHolder(recyclableView);
     }
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
@@ -53,7 +53,7 @@ public class DriverViewAdapter extends PickerRecyclerView<DriverViewAdapter.Driv
         notifyDataSetChanged();
     }
 
-    public class DriverViewHolder extends PickerRecyclerView.AbstractHolder<String> {
+    public class DriverViewHolder extends PackageAdapter.AbstractHolder<String> {
         Driver mCurrentDriver;
         int mCurrentPosition;
 

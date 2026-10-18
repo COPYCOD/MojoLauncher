@@ -1,4 +1,4 @@
-package git.artdeell.mojo.dialogs.picker;
+package git.artdeell.mojo.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,12 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import git.artdeell.mojo.R;
-import git.artdeell.mojo.dialogs.EditAdapter;
 
-public abstract class PickerRecyclerView<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> implements EditAdapter {
+public abstract class PackageAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> implements EditAdapter {
 
-    protected final PickerDialog dialog;
-    public PickerRecyclerView(PickerDialog dialog){
+    protected final PackageSelector dialog;
+    public PackageAdapter(PackageSelector dialog){
         this.dialog = dialog;
     }
 
@@ -28,7 +27,7 @@ public abstract class PickerRecyclerView<T extends RecyclerView.ViewHolder> exte
     @NonNull
     @Override
     public T onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picker_dialog, parent,false);
+        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_package_selector, parent,false);
         return this.abstractHolder(recyclableView);
     }
 
@@ -59,10 +58,10 @@ public abstract class PickerRecyclerView<T extends RecyclerView.ViewHolder> exte
         public AbstractHolder(@NonNull View itemView) {
             super(itemView);
 
-            mNameTextView = itemView.findViewById(R.id.picker_view_name);
-            mExtraNameTextView = itemView.findViewById(R.id.picker_ext_name);
-            mSetDefaultButton = itemView.findViewById(R.id.picker_view_setdefaultbtn);
-            mDeleteButton = itemView.findViewById(R.id.picker_view_removebtn);
+            mNameTextView = itemView.findViewById(R.id.selector_view_name);
+            mExtraNameTextView = itemView.findViewById(R.id.selector_view_ext_name);
+            mSetDefaultButton = itemView.findViewById(R.id.selector_view_setdefaultbtn);
+            mDeleteButton = itemView.findViewById(R.id.selector_view_removebtn);
             mDefaultColors =  mExtraNameTextView.getTextColors();
             mContext = itemView.getContext();
         }
