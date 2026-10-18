@@ -120,6 +120,14 @@ public class DriverManager {
         LauncherPreferences.PREF_VULKAN_DRIVER = driver.getHash(); // Builtin will return null
         LauncherPreferences.DEFAULT_PREF.edit().putString("customVulkanDriver", LauncherPreferences.PREF_VULKAN_DRIVER).apply();
     }
+
+    public static File getDriverRoot(Driver driver) {
+        if(driver.isDefault()) return null;
+        File root = new File(packagesPath, driver.getHash());
+        if(root.exists() && root.isDirectory()) return root;
+        else return null;
+    }
+
     private static boolean ensureRootExists(){
         if(!packagesPath.exists())
             return packagesPath.mkdirs();
