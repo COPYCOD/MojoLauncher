@@ -80,23 +80,19 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         Preference drivers = requirePreference("manageDrivers");
         SwitchPreferenceCompat customVk = requirePreference("zinkPreferSystemDriver", SwitchPreferenceCompat.class);
-        if(DriverManager.isSupportedByDevice()) {
-            if(!BuildConfig.BUILD_TYPE.equals("gplay")) {
-                drivers.setVisible(true);
-                updateDriversPref();
-                drivers.setOnPreferenceClickListener(pref -> {
-                    openDriverDialog();
-                    return true;
-                });
-            }
-            customVk.setVisible(true);
-            customVk.setChecked(LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER);
-        } else {
-            drivers.setVisible(false);
-            customVk.setVisible(false);
-        }
-
-
+        boolean gplay = BuildConfig.BUILD_TYPE.equals("gplay");
+        boolean isAdreno = GpuUtils.getGlInfo().isAdreno();
+        boolean hasSupport = DriverManager.isSupportedByDevice();
+        customVk.setVisible(hasSupport && (!gplay || isAdreno));
+        customVk.setChecked(LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER);
+        if(!gplay && hasSupport) {
+            drivers.setVisible(true);
+            updateDriversPref();
+            drivers.setOnPreferenceClickListener(pref -> {
+                openDriverDialog();
+                return true;
+            });
+        } else drivers.setVisible(false);
         computeVisibility();
     }
 
