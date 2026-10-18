@@ -4,21 +4,16 @@ package git.artdeell.mojo.vulkan.ui;
 import static git.artdeell.mojo.MojoApplication.sExecutorService;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
+import git.artdeell.mojo.dialogs.picker.PickerRecyclerView;
 import git.artdeell.mojo.vulkan.driver.AdrenoDriver;
 import git.artdeell.mojo.vulkan.DriverManager;
 import git.artdeell.mojo.vulkan.driver.Driver;
@@ -27,18 +22,15 @@ import git.artdeell.mojo.R;
 
 import java.util.List;
 
-public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.DriverViewHolder> {
-    private final DriverConfigDialog dialog;
-    DriverViewAdapter(DriverConfigDialog dialog){
-        this.dialog = dialog;
+public class DriverViewAdapter extends PickerRecyclerView<DriverViewAdapter.DriverViewHolder> {
+    public DriverViewAdapter(DriverConfigDialog dialog) {
+        super(dialog);
     }
-
-    private boolean mIsDeleting = false;
 
     @NonNull
     @Override
     public DriverViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_driver_picker,parent,false);
+        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picker_dialog,parent,false);
         return new DriverViewHolder(recyclableView);
     }
 
@@ -46,16 +38,21 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
         // Always bind the default driver first
         if(position == 0)
-            holder.bindDriver(null, 0);
+            holder.bind(null, 0);
         else {
             List<String> drivers = DriverManager.getDriverPaths();
-            holder.bindDriver(drivers.get(position - 1), position);
+            holder.bind(drivers.get(position - 1), position);
         }
     }
 
     @Override
     public int getItemCount() {
         return DriverManager.getDriverPaths().size() + 1; // this may!! throw null if not adreno, but we init this view only if adreno anyway
+    }
+
+    @Override
+    protected DriverViewHolder abstractHolder(View recyclableView) {
+        return new DriverViewHolder(recyclableView);
     }
 
     public boolean isDefault(Driver driver) {
@@ -68,37 +65,13 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         notifyDataSetChanged();
     }
 
-    @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
-    public void setIsEditing(boolean isEditing) {
-        mIsDeleting = isEditing;
-        notifyDataSetChanged();
-    }
 
-    public boolean getIsEditing(){
-        return mIsDeleting;
-    }
-
-
-    public class DriverViewHolder extends RecyclerView.ViewHolder {
-        final TextView mDriverNameTextView;
-        final TextView mDriverExtraNameTextView;
-        final ColorStateList mDefaultColors;
-        final Button mSetDefaultButton;
-        final ImageButton mDeleteButton;
-        final Context mContext;
+    public class DriverViewHolder extends PickerRecyclerView.AbstractHolder<String> {
         Driver mCurrentDriver;
         int mCurrentPosition;
 
         public DriverViewHolder(View itemView) {
             super(itemView);
-            mDriverNameTextView = itemView.findViewById(R.id.driver_view_name);
-            mDriverExtraNameTextView = itemView.findViewById(R.id.driver_view_ext_name);
-            mSetDefaultButton = itemView.findViewById(R.id.driver_view_setdefaultbtn);
-            mDeleteButton = itemView.findViewById(R.id.driver_view_removebtn);
-
-            mDefaultColors =  mDriverExtraNameTextView.getTextColors();
-            mContext = itemView.getContext();
-
             setupOnClickListeners();
         }
 
@@ -131,26 +104,26 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         }
 
         @SuppressLint("SetTextI18n")
-        public void bindDriver(String driverPath, int pos) {
+        public void bind(String driverPath, int pos) {
             mCurrentPosition = pos;
             updateButtonsVisibility();
             if((mCurrentDriver = driverPath != null ? DriverManager.loadDriver(driverPath) : DriverManager.DEFAULT_DRIVER) == null){
                 Log.w(DriverManager.TAG, "Driver " + driverPath + " is corrupted");
-                mDriverNameTextView.setText("");
-                mDriverExtraNameTextView.setText(R.string.driver_config_corrupted);
-                mDriverExtraNameTextView.setTextColor(Color.parseColor("#FF0000"));
+                mNameTextView.setText("");
+                mExtraNameTextView.setText(R.string.driver_config_corrupted);
+                mExtraNameTextView.setTextColor(Color.parseColor("#FF0000"));
                 mSetDefaultButton.setEnabled(false);
                 mSetDefaultButton.setVisibility(View.GONE);
             } else {
                 if(mCurrentDriver.isDefault()){
-                    mDriverNameTextView.setText(R.string.driver_default_name);
-                    mDriverExtraNameTextView.setText(R.string.driver_default_extra_name);
+                    mNameTextView.setText(R.string.driver_default_name);
+                    mExtraNameTextView.setText(R.string.driver_default_extra_name);
                     mDeleteButton.setVisibility(View.GONE);
                     mDeleteButton.setClickable(false);
                 } else {
-                    mDriverNameTextView.setText(mCurrentDriver.getName());
+                    mNameTextView.setText(mCurrentDriver.getName());
                     AdrenoDriver adr = (AdrenoDriver) mCurrentDriver;
-                    mDriverExtraNameTextView.setText(adr.getAuthor() + " - " + adr.getDriverVersion());
+                    mExtraNameTextView.setText(adr.getAuthor() + " - " + adr.getDriverVersion());
                 }
                 boolean isPreferred = isDefault(mCurrentDriver);
                 mSetDefaultButton.setEnabled(!isPreferred);
@@ -159,8 +132,8 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         }
 
         private void updateButtonsVisibility(){
-            mSetDefaultButton.setVisibility(mIsDeleting ? View.GONE : View.VISIBLE);
-            mDeleteButton.setVisibility(mIsDeleting ? View.VISIBLE : View.GONE);
+            mSetDefaultButton.setVisibility(isEditing() ? View.GONE : View.VISIBLE);
+            mDeleteButton.setVisibility(isEditing() ? View.VISIBLE : View.GONE);
         }
     }
 }

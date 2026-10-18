@@ -1,66 +1,43 @@
 package git.artdeell.mojo.vulkan.ui;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import git.artdeell.mojo.R;
+import git.artdeell.mojo.dialogs.picker.PickerDialog;
+import git.artdeell.mojo.dialogs.picker.PickerRecyclerView;
 
-// TODO: Abstract this as this was based on MultiRT dialog
-public class DriverConfigDialog {
-
-    private AlertDialog mDialog;
-    private RecyclerView mDialogView;
-
-    public void show(){
-        refresh();
-        mDialog.show();
-    }
-    public void close(){
-        mDialog.cancel();
-    }
-    public void onDismiss(Runnable runnable){
-        mDialog.setOnDismissListener(dialog -> {
-            runnable.run();
-        });
+public class DriverConfigDialog extends PickerDialog {
+    @Override
+    protected int getTitleRes() {
+        return R.string.driver_config_title;
     }
 
-    @SuppressLint("NotifyDataSetChanged") //only used to completely refresh the list, it is necessary
-    public void refresh() {
-        RecyclerView.Adapter<?> adapter = mDialogView.getAdapter();
-        if(adapter != null) adapter.notifyDataSetChanged();
+    @Override
+    protected int getPositiveButtonText() {
+        return R.string.driver_config_import;
     }
 
-    public void prepare(Context activity, ActivityResultLauncher<Object> installDriver) {
-        mDialogView = new RecyclerView(activity);
-        mDialogView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        DriverViewAdapter driverViewAdapter = new DriverViewAdapter(this);
-        mDialogView.setAdapter(driverViewAdapter);
+    @Override
+    protected int getNeutralButtonText() {
+        return R.string.driver_config_delete;
+    }
 
-        mDialog = new AlertDialog.Builder(activity)
-                .setTitle(R.string.driver_config_title)
-                .setView(mDialogView)
-                .setPositiveButton(R.string.driver_config_import, (dialog, which) -> {
-                    Toast.makeText(activity, R.string.driver_config_import_notify, Toast.LENGTH_LONG).show();
-                    installDriver.launch(null);
-                })
-                .setNeutralButton(R.string.driver_config_delete, null)
-                .create();
+    @Override
+    protected int getEditingButtonLabel() {
+        return mAdapter.isEditing() ? R.string.driver_config_delete : R.string.driver_config_select;
+    }
 
-        // Custom button behavior without dismiss
-        mDialog.setOnShowListener(dialog -> {
-            Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
-            button.setOnClickListener(view -> {
-                boolean isEditing = !driverViewAdapter.getIsEditing();
-                driverViewAdapter.setIsEditing(isEditing);
-                button.setText(isEditing ? R.string.driver_config_select : R.string.driver_config_delete);
-            });
-        });
+    @Override
+    protected PickerRecyclerView<?> createAdapter(Context context, PickerDialog dialog) {
+        return new DriverViewAdapter(this);
+    }
+
+    @Override
+    protected void onPositive(Context context, ActivityResultLauncher<Object> launcher) {
+        Toast.makeText(context, R.string.driver_config_import_notify, Toast.LENGTH_LONG).show();
+        launcher.launch(null);
     }
 }
