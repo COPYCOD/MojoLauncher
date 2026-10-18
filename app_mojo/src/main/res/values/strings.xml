@@ -558,4 +558,7 @@
     <string name="driver_config_import_notify">Select a valid AdrenoTools driver package</string>
     <string name="driver_config_corrupted">Invalid or corrupted driver</string>
     <string name="driver_config_remove_failed">Unable to remove the driver package</string>
+    <string name="driver_progress_validate">Validating driver package</string>
+    <string name="driver_progress_install">Installing driver package</string>
+
 </resources>
