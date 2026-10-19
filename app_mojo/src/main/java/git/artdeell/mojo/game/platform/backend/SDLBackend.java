@@ -1,6 +1,7 @@
 package git.artdeell.mojo.game.platform.backend;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 
@@ -90,12 +91,8 @@ public class SDLBackend implements PlatformBackend {
 
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative) {
-        if(relative)
-            // In relative mode we need to send mouse clicks at zero position to not accidentally trigger a motion event
-            SDLActivity.onNativeMouseButton(button, state, 0, 0, true);
-        else
-            SDLActivity.onNativeMouseButton(button, state, (float) x, (float) y, false);
+    public void sendMouseButtonEvent(int button, int state, int mods) {
+        SDLActivity.onNativeMouseButton(button, state);
     }
 
     @Override
