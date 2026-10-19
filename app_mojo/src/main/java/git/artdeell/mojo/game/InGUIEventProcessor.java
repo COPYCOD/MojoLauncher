@@ -50,9 +50,13 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                         sendTouchCoordinates(mainPointerX, mainPointerY);
 
                         if(!mIsMouseDown) {
-                            if(!hasStartedMoving()) setMoveStart(motionEvent);
-                            if(!LeftClickGesture.isFingerStill(mStartX, mStartY, mainPointerX, mainPointerY, FINGER_STILL_THRESHOLD))
+                            if(LauncherPreferences.PREF_DISABLE_GESTURES) {
                                 enableMouse();
+                            }else {
+                                if(!hasStartedMoving()) setMoveStart(motionEvent);
+                                if(!LeftClickGesture.isFingerStill(mStartX, mStartY, mainPointerX, mainPointerY, FINGER_STILL_THRESHOLD))
+                                    enableMouse();
+                            }
                         }
 
                     }
