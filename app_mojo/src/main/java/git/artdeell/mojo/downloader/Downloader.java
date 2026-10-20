@@ -1,5 +1,7 @@
 package git.artdeell.mojo.downloader;
 
+import android.util.Log;
+
 import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.Tools;
@@ -11,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -31,7 +34,7 @@ import git.artdeell.mojo.utils.FileUtils;
 public class Downloader {
     private static final double ONE_MEGABYTE = (1024d * 1024d);
     private static final ThreadLocal<byte[]> sThreadLocalBuffer = new ThreadLocal<>();
-    protected static final File sPartFileDir = new File(Tools.DIR_EXT_CACHE, "partfiles");
+    protected static final File sPartFileDir = new File(Tools.DIR_GAME_HOME, "partfiles");
     private final String mProgressKey;
     private final AtomicReference<IOException> mThreadException = new AtomicReference<>();
     private final AtomicInteger mDownloadedFileCounter = new AtomicInteger();
@@ -49,7 +52,13 @@ public class Downloader {
     protected void runDownloads(ArrayList<? extends TaskMetadata> downloads) throws IOException, InterruptedException {
         FileUtils.ensureDirectory(sPartFileDir);
         insertMetadata(downloads);
-        performDownloads(downloads);
+        try {
+            performDownloads(downloads);
+        } catch (IOException | InterruptedException e) {
+            mDownloadService.shutdownNow();
+            mVerifyService.shutdownNow();
+            throw e;
+        }
     }
 
     private void performDownloads(ArrayList<? extends TaskMetadata> metadata) throws IOException, InterruptedException {
@@ -189,6 +198,7 @@ public class Downloader {
 
     protected void downloadFile(File file, URL url, BytesCopiedListener listener) throws IOException {
         HttpURLConnection connection = openConnection(url);
+        if(Thread.interrupted()) throw new InterruptedIOException();
         try(FileOutputStream outputStream = new FileOutputStream(file)) {
             downloadToStream(connection, outputStream, listener);
         }finally {
@@ -206,6 +216,7 @@ public class Downloader {
             if(responseCode != 206) {
                 return false;
             }
+            if(Thread.interrupted()) throw new InterruptedIOException();
             try(FileOutputStream outputStream = new FileOutputStream(file, true)) {
                 downloadToStream(connection, outputStream, listener);
                 return true;
