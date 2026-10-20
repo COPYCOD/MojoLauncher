@@ -1,7 +1,5 @@
 package git.artdeell.mojo.downloader;
 
-import android.util.Log;
-
 import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.Tools;
@@ -249,5 +247,26 @@ public class Downloader {
             sThreadLocalBuffer.set(buffer);
         }
         return buffer;
+    }
+
+    public static double calculateCacheSizeMegabytes() {
+        File[] files = Downloader.sPartFileDir.listFiles();
+        if(files == null || files.length == 0) return 0;
+        long usedSpace = 0;
+        for(File f : files) {
+            if(Thread.interrupted()) return -1;
+            long fileLen = f.length();
+            if(fileLen != -1) usedSpace += fileLen;
+        }
+        return usedSpace / ONE_MEGABYTE;
+    }
+
+    public static void clearCache() throws IOException {
+        File[] files = Downloader.sPartFileDir.listFiles();
+        if(files == null) return;
+        for(File f : files) {
+            if(f.isDirectory()) return;
+            if(!f.delete()) throw new IOException("Failed to remove "+f.getName());
+        }
     }
 }
