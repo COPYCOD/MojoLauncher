@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import git.artdeell.mojo.dialogs.PackageAdapter;
 import git.artdeell.mojo.vulkan.driver.AdrenoDriver;
 import git.artdeell.mojo.vulkan.DriverManager;
+import git.artdeell.mojo.vulkan.driver.BuiltinDriver;
 import git.artdeell.mojo.vulkan.driver.Driver;
 
 import git.artdeell.mojo.R;
@@ -23,6 +24,9 @@ import git.artdeell.mojo.R;
 import java.util.List;
 
 public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverViewHolder> {
+    // On devices with the default driver we always bind it first in the list.
+    // Then we need to sync the size of driver list and recycler view list
+    private final int driverOffset = BuiltinDriver.deviceHasDriver() ? 1 : 0;
     public DriverViewAdapter(DriverConfigDialog dialog) {
         super(dialog);
     }
@@ -33,14 +37,14 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
     }
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
         // Always bind the default driver first
-        if(position == 0)
+        if(position == 0 && driverOffset > 0)
             holder.bind(null, 0);
         else {
             List<String> drivers = DriverManager.getDriverPaths();
-            holder.bind(drivers.get(position - 1), position);
+            holder.bind(drivers.get(position - driverOffset), position);
         }
     }
-    public int getItemCount() { return DriverManager.getDriverPaths().size() + 1; }
+    public int getItemCount() { return DriverManager.getDriverPaths().size() + driverOffset; }
     protected DriverViewHolder abstractHolder(View recyclableView) {
         return new DriverViewHolder(recyclableView);
     }

@@ -22,6 +22,7 @@ import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.GpuUtils;
 import git.artdeell.mojo.vulkan.DriverInstaller;
 import git.artdeell.mojo.vulkan.DriverManager;
+import git.artdeell.mojo.vulkan.driver.BuiltinDriver;
 import git.artdeell.mojo.vulkan.driver.Driver;
 import git.artdeell.mojo.vulkan.ui.DriverConfigDialog;
 
@@ -133,7 +134,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         }
         Driver driver = DriverManager.getPreferredDriver();
         if(driver.isDefault())
-            preference.setSummary(R.string.driver_default_name);
+            preference.setSummary(BuiltinDriver.deviceHasDriver() ? R.string.driver_default_name : R.string.driver_config_pref_subtitle);
         else
             preference.setSummary(driver.getName());
         preference.setVisible(true);
