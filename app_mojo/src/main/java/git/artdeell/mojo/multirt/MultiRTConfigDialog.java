@@ -23,7 +23,7 @@ public class MultiRTConfigDialog extends PackageSelector {
     protected int getTitleRes() { return R.string.multirt_config_title; }
     protected int getPositiveButtonText() { return R.string.multirt_config_add; }
     protected int getNeutralButtonText() { return R.string.multirt_delete_runtime; }
-    protected int getEditingButtonLabel() { return mAdapter.isEditing() ? R.string.multirt_config_setdefault : R.string.multirt_delete_runtime; }
+    protected int getEditingButtonLabel() { return R.string.multirt_config_setdefault; }
     protected PackageAdapter<?> createAdapter(Context context, PackageSelector dialog) { return new RTRecyclerViewAdapter(dialog); }
     protected void onPositive(Context context, ActivityResultLauncher<Object> launcher) { launcher.launch(null); }
 }
