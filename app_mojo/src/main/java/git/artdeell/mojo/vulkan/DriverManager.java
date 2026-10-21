@@ -7,9 +7,11 @@ import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.FileUtils;
+import git.artdeell.mojo.utils.JSONUtils;
 import git.artdeell.mojo.utils.ZipUtils;
 import git.artdeell.mojo.vulkan.driver.AdrenoDriver;
 import git.artdeell.mojo.vulkan.driver.BuiltinDriver;
+import git.artdeell.mojo.vulkan.driver.DisplayDriver;
 import git.artdeell.mojo.vulkan.driver.Driver;
 
 import java.io.File;
@@ -33,7 +35,6 @@ public class DriverManager {
     private static final File packagesPath = new File(Tools.DIR_DATA, "vulkan-drivers");
     private static Boolean supported = null;
     private DriverManager() {}
-
     /**
      * Checks if DriverManager i.e. custom drivers are supported on the current device
      * @return True if requirements are met, false otherwise
@@ -66,9 +67,9 @@ public class DriverManager {
     public static boolean isPreferredDriver(Driver driver){
         String pkg = getPreferredDriverHash();
         // selected default package
-        if(pkg == null && driver == DEFAULT_DRIVER)
+        if(pkg == null && (driver == null || driver instanceof BuiltinDriver))
             return true;
-        if(pkg != null && driver instanceof AdrenoDriver) {
+        if(pkg != null && driver != null) {
             return pkg.equals(driver.getHash());
         }
         return false;
@@ -189,6 +190,17 @@ public class DriverManager {
         if (!metadata.exists())
             return null;
         return AdrenoDriver.fromJson(metadata);
+    }
+
+    public static DisplayDriver loadDisplayDriver(String hash) {
+        File metadata = new File(packagesPath, hash + "/" + METADATA_FILENAME);
+        if (!metadata.exists()) return null;
+        try {
+            return JSONUtils.readFromFile(metadata, DisplayDriver.class);
+        } catch (IOException e) {
+            Log.i(TAG, "Failed to read metadata from " + metadata.getAbsolutePath() + "!");
+            return null;
+        }
     }
 
     /**

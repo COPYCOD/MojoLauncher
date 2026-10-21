@@ -12,11 +12,8 @@ import git.artdeell.mojo.utils.JSONUtils;
 import git.artdeell.mojo.vulkan.DriverManager;
 
 // AdrenoTools package driver
-public class AdrenoDriver implements Driver {
-    public final String name;
+public class AdrenoDriver extends DisplayDriver {
     public final String description;
-    public final String author;
-    public final String driverVersion;
     public final String libraryName;
 
     private AdrenoDriver(String name, String description, String author, String driverVersion, String libraryName, int schemaVersion, int minApi) {
@@ -49,17 +46,8 @@ public class AdrenoDriver implements Driver {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
     public String getMainLibrary() {
         return libraryName;
     }
 
-    @Override
-    public String getHash() {
-        String to = name + "::" + author;
-        return UUID.nameUUIDFromBytes(to.getBytes(StandardCharsets.UTF_8)).toString();
-    }
-    }
+}

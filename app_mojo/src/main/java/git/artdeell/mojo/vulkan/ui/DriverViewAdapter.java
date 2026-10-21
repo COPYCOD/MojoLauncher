@@ -17,19 +17,33 @@ import git.artdeell.mojo.dialogs.PackageAdapter;
 import git.artdeell.mojo.vulkan.driver.AdrenoDriver;
 import git.artdeell.mojo.vulkan.DriverManager;
 import git.artdeell.mojo.vulkan.driver.BuiltinDriver;
+import git.artdeell.mojo.vulkan.driver.DisplayDriver;
 import git.artdeell.mojo.vulkan.driver.Driver;
 
 import git.artdeell.mojo.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverViewHolder> {
     // On devices with the default driver we always bind it first in the list.
     // Then we need to sync the size of driver list and recycler view list
     private final int driverOffset = BuiltinDriver.deviceHasDriver() ? 1 : 0;
+    private final List<DisplayDriver> displayDrivers = new ArrayList<>();
+
+    void refreshList() {
+        displayDrivers.clear();
+        for(String hash : DriverManager.getDriverPaths()) {
+            DisplayDriver dd = DriverManager.loadDisplayDriver(hash);
+            if(dd != null) displayDrivers.add(dd);
+        }
+    }
+
     public DriverViewAdapter(DriverConfigDialog dialog) {
         super(dialog);
+        refreshList();
     }
+
     @NonNull
     public DriverViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_package_selector,parent,false);
@@ -40,11 +54,10 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
         if(position == 0 && driverOffset > 0)
             holder.bind(null, 0);
         else {
-            List<String> drivers = DriverManager.getDriverPaths();
-            holder.bind(drivers.get(position - driverOffset), position);
+            holder.bind(displayDrivers.get(position - driverOffset), position);
         }
     }
-    public int getItemCount() { return DriverManager.getDriverPaths().size() + driverOffset; }
+    public int getItemCount() { return displayDrivers.size() + driverOffset; }
     protected DriverViewHolder abstractHolder(View recyclableView) {
         return new DriverViewHolder(recyclableView);
     }
@@ -56,8 +69,8 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
         DriverManager.setPreferredDriver(driver);
     }
 
-    public class DriverViewHolder extends PackageAdapter.AbstractHolder<String> implements View.OnClickListener {
-        Driver mCurrentDriver;
+    public class DriverViewHolder extends PackageAdapter.AbstractHolder<DisplayDriver> implements View.OnClickListener {
+        DisplayDriver mCurrentDriver;
         int mCurrentPosition;
 
         public DriverViewHolder(View itemView) {
@@ -68,41 +81,30 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
         @SuppressLint("NotifyDataSetChanged") // same as all the other ones
         private void setupOnClickListeners(){
             mSetDefaultButton.setOnClickListener(v -> {
-                if(mCurrentDriver != null) {
-                    setDefault(mCurrentDriver);
-                    DriverViewAdapter.this.dialog.close();
-                }
+                setDefault(mCurrentDriver);
+                DriverViewAdapter.this.dialog.close();
             });
 
             mDeleteButton.setOnClickListener(this);
         }
 
         @SuppressLint("SetTextI18n")
-        public void bind(String driverPath, int pos) {
+        public void bind(DisplayDriver driver, int pos) {
+            mCurrentDriver = driver;
             mCurrentPosition = pos;
             updateButtonsVisibility();
-            if((mCurrentDriver = driverPath != null ? DriverManager.loadDriver(driverPath) : DriverManager.DEFAULT_DRIVER) == null){
-                Log.w(DriverManager.TAG, "Driver " + driverPath + " is corrupted");
-                mNameTextView.setText("");
-                mExtraNameTextView.setText(R.string.driver_config_corrupted);
-                mExtraNameTextView.setTextColor(Color.RED);
-                mSetDefaultButton.setEnabled(false);
-                mSetDefaultButton.setVisibility(View.GONE);
+            if(mCurrentDriver == null){
+                mNameTextView.setText(R.string.driver_default_name);
+                mExtraNameTextView.setText(R.string.driver_default_extra_name);
+                mDeleteButton.setVisibility(View.GONE);
+                mDeleteButton.setClickable(false);
             } else {
-                if(mCurrentDriver instanceof BuiltinDriver){
-                    mNameTextView.setText(R.string.driver_default_name);
-                    mExtraNameTextView.setText(R.string.driver_default_extra_name);
-                    mDeleteButton.setVisibility(View.GONE);
-                    mDeleteButton.setClickable(false);
-                } else {
-                    mNameTextView.setText(mCurrentDriver.getName());
-                    AdrenoDriver adr = (AdrenoDriver) mCurrentDriver;
-                    mExtraNameTextView.setText(adr.author + " - " + adr.driverVersion);
-                }
-                boolean isPreferred = isDefault(mCurrentDriver);
-                mSetDefaultButton.setEnabled(!isPreferred);
-                mSetDefaultButton.setText(isPreferred ? R.string.driver_config_already_used : R.string.driver_config_use);
+                mNameTextView.setText(mCurrentDriver.name);
+                mExtraNameTextView.setText(mCurrentDriver.author + " - " + mCurrentDriver.driverVersion);
             }
+            boolean isPreferred = isDefault(mCurrentDriver);
+            mSetDefaultButton.setEnabled(!isPreferred);
+            mSetDefaultButton.setText(isPreferred ? R.string.driver_config_already_used : R.string.driver_config_use);
         }
 
         private void updateButtonsVisibility(){
@@ -115,13 +117,14 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
                 Toast.makeText(mContext, R.string.driver_config_remove_failed, Toast.LENGTH_SHORT).show();
                 return;
             }
+            displayDrivers.remove(mCurrentDriver);
             if(getBindingAdapter() != null) getBindingAdapter().notifyDataSetChanged();
         }
 
         // Delete driver
         @Override
         public void onClick(View v) {
-            if (mCurrentDriver != null && mCurrentDriver instanceof BuiltinDriver) return;
+            if (mCurrentDriver == null) return;
             sExecutorService.execute(() -> mDeleteButton.post(() -> afterDelete(DriverManager.removeDriver(mCurrentDriver.getHash()))));
         }
     }

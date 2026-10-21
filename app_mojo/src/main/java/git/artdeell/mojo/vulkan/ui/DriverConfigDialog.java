@@ -10,6 +10,13 @@ import git.artdeell.mojo.dialogs.PackageSelector;
 import git.artdeell.mojo.dialogs.PackageAdapter;
 
 public class DriverConfigDialog extends PackageSelector {
+
+    @Override
+    public void refresh() {
+        ((DriverViewAdapter) mAdapter).refreshList();
+        super.refresh();
+    }
+
     protected int getTitleRes() { return R.string.driver_config_title; }
     protected int getPositiveButtonText() { return R.string.driver_config_import;}
     protected int getNeutralButtonText() { return R.string.driver_config_delete; }
