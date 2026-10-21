@@ -40,8 +40,8 @@ public class DriverManager {
      */
     public static boolean isSupportedByDevice(){
         return supported == null ?
-                // Custom drivers are viable only on API 28+ ARM64
-                (supported = Build.VERSION.SDK_INT >= 28 && Architecture.getDeviceArchitecture() == Architecture.ARCH_ARM64)
+                // Custom drivers are viable only on API 28+
+                (supported = Build.VERSION.SDK_INT >= 28)
                 : supported;
     }
 
