@@ -54,7 +54,6 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
     @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
     public void setDefault(Driver driver){
         DriverManager.setPreferredDriver(driver);
-        notifyDataSetChanged();
     }
 
     public class DriverViewHolder extends PackageAdapter.AbstractHolder<String> {
