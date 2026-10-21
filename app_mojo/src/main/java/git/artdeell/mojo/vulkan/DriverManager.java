@@ -256,7 +256,7 @@ public class DriverManager {
         }
     }
 
-    static void installDriverContent(String hash, InputStream is, boolean overwrite){
+    static void installDriverContent(String hash, InputStream is, boolean overwrite) throws IOException {
         ensureRootExists();
         try(ZipInputStream zis = new ZipInputStream(is)){
             if(driverExists(hash)){
@@ -273,8 +273,6 @@ public class DriverManager {
             ZipUtils.zipStreamExtract(zis, installPath);
             Log.i(TAG, "Installed driver package " + hash + " into " + installPath.getAbsolutePath());
             loadDriver(hash);
-        } catch (Exception e) {
-            Log.e(TAG, "Malformed driver package file");
         }
     }
 
