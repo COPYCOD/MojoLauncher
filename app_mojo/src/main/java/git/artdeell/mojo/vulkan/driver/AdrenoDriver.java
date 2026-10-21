@@ -13,11 +13,11 @@ import git.artdeell.mojo.vulkan.DriverManager;
 
 // AdrenoTools package driver
 public class AdrenoDriver implements Driver {
-    private final String name;
-    private final String description;
-    private final String author;
-    private final String driverVersion;
-    private final String libraryName;
+    public final String name;
+    public final String description;
+    public final String author;
+    public final String driverVersion;
+    public final String libraryName;
 
     private AdrenoDriver(String name, String description, String author, String driverVersion, String libraryName, int schemaVersion, int minApi) {
         this.name = name;
@@ -29,8 +29,8 @@ public class AdrenoDriver implements Driver {
         this.minApi = minApi;
     }
 
-    private final int schemaVersion;
-    private final int minApi;
+    public final int schemaVersion;
+    public final int minApi;
 
 
     public static AdrenoDriver fromJson(File metadata) {
@@ -48,6 +48,11 @@ public class AdrenoDriver implements Driver {
         return JSONUtils.readFromStream(is, AdrenoDriver.class);
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public String getMainLibrary() {
         return libraryName;
     }
@@ -62,32 +67,4 @@ public class AdrenoDriver implements Driver {
         String to = name + "::" + author;
         return UUID.nameUUIDFromBytes(to.getBytes(StandardCharsets.UTF_8)).toString();
     }
-
-    public String getName() {
-        return name;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getDriverVersion() {
-        return driverVersion;
-    }
-
-    public String getLibraryName() {
-        return libraryName;
-    }
-
-    public int getSchemaVersion() {
-        return schemaVersion;
-    }
-
-    public int getMinApi() {
-        return minApi;
-    }
-}

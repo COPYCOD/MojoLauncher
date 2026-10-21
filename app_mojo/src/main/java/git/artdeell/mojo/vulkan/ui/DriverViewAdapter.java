@@ -110,7 +110,7 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
                 } else {
                     mNameTextView.setText(mCurrentDriver.getName());
                     AdrenoDriver adr = (AdrenoDriver) mCurrentDriver;
-                    mExtraNameTextView.setText(adr.getAuthor() + " - " + adr.getDriverVersion());
+                    mExtraNameTextView.setText(adr.author + " - " + adr.driverVersion);
                 }
                 boolean isPreferred = isDefault(mCurrentDriver);
                 mSetDefaultButton.setEnabled(!isPreferred);
