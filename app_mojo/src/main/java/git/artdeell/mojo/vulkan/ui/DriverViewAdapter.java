@@ -89,7 +89,7 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
                 mSetDefaultButton.setEnabled(false);
                 mSetDefaultButton.setVisibility(View.GONE);
             } else {
-                if(mCurrentDriver.isDefault()){
+                if(mCurrentDriver instanceof BuiltinDriver){
                     mNameTextView.setText(R.string.driver_default_name);
                     mExtraNameTextView.setText(R.string.driver_default_extra_name);
                     mDeleteButton.setVisibility(View.GONE);
@@ -118,10 +118,10 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
             if(getBindingAdapter() != null) getBindingAdapter().notifyDataSetChanged();
         }
 
-        // Set default
+        // Delete driver
         @Override
         public void onClick(View v) {
-            if (mCurrentDriver != null && mCurrentDriver.isDefault()) return;
+            if (mCurrentDriver != null && mCurrentDriver instanceof BuiltinDriver) return;
             sExecutorService.execute(() -> mDeleteButton.post(() -> afterDelete(DriverManager.removeDriver(mCurrentDriver.getHash()))));
         }
     }

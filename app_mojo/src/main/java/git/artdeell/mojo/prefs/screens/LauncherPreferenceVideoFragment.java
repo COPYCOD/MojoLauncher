@@ -133,7 +133,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             return;
         }
         Driver driver = DriverManager.getPreferredDriver();
-        if(driver.isDefault())
+        if(driver instanceof BuiltinDriver)
             preference.setSummary(BuiltinDriver.deviceHasDriver() ? R.string.driver_default_name : R.string.driver_config_pref_subtitle);
         else
             preference.setSummary(driver.getName());

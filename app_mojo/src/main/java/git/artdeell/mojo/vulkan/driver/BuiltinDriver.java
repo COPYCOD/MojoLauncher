@@ -18,11 +18,6 @@ public final class BuiltinDriver implements Driver {
     }
 
     @Override
-    public boolean isDefault() {
-        return true;
-    }
-
-    @Override
     public String getHash() {
         return null;
     }

@@ -88,7 +88,7 @@ public class DriverManager {
      */
     public static String getPreferredDriverLibraryPath(){
         Driver driver = getPreferredDriver();
-        if(driver.isDefault()) return driver.getMainLibrary(); // Default driver should be in the library path already
+        if(driver instanceof BuiltinDriver) return driver.getMainLibrary(); // Default driver should be in the library path already
         File path = new File(packagesPath,  (driver.getHash() + "/" + driver.getMainLibrary()));
         if(path.exists()) return path.getAbsolutePath();
 
@@ -103,7 +103,7 @@ public class DriverManager {
      */
     public static String getPreferredDriverRootPath(){
         Driver driver = getPreferredDriver();
-        if(driver.isDefault()) return null; // Already in the library path
+        if(driver instanceof BuiltinDriver) return null; // Already in the library path
         File path = new File(packagesPath,  driver.getHash());
         if(path.exists())
             return path.getAbsolutePath();
@@ -121,7 +121,7 @@ public class DriverManager {
     }
 
     public static File getDriverRoot(Driver driver) {
-        if(driver.isDefault()) return null;
+        if(driver instanceof BuiltinDriver) return null;
         File root = new File(packagesPath, driver.getHash());
         if(root.exists() && root.isDirectory()) return root;
         else return null;

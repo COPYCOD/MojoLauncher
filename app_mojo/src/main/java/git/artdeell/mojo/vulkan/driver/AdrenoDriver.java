@@ -58,11 +58,6 @@ public class AdrenoDriver implements Driver {
     }
 
     @Override
-    public boolean isDefault() {
-        return false;
-    }
-
-    @Override
     public String getHash() {
         String to = name + "::" + author;
         return UUID.nameUUIDFromBytes(to.getBytes(StandardCharsets.UTF_8)).toString();
