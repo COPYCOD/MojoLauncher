@@ -167,11 +167,7 @@ public class GameRenderer {
         if(LauncherPreferences.PREF_UBWC_WORKAROUND) environment.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");
 
         Driver driver = DriverManager.getPreferredDriver();
-        if(!driver.isDefault()) {
-            File root = DriverManager.getDriverRoot(driver);
-            MojoExec.overrideVulkanDriverPath(driver.getMainLibrary());
-            if(root != null) MojoExec.overrideVulkanLibraryPath(root.getAbsolutePath());
-        }
-        MojoExec.overrideVulkanDriver(true);
+        File root = DriverManager.getDriverRoot(driver);
+        MojoExec.configureCustomVulkanDriver(driver.getMainLibrary(), root == null ? null : root.getAbsolutePath());
     }
 }
