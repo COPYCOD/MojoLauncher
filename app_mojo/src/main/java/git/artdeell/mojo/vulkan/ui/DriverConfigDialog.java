@@ -14,7 +14,7 @@ public class DriverConfigDialog extends PackageSelector {
     protected int getPositiveButtonText() { return R.string.driver_config_import;}
     protected int getNeutralButtonText() { return R.string.driver_config_delete; }
 
-    protected int getEditingButtonLabel() { return mAdapter.isEditing() ? R.string.driver_config_delete : R.string.driver_config_select; }
+    protected int getEditingButtonLabel() { return R.string.driver_config_select; }
 
     protected PackageAdapter<?> createAdapter(Context context, PackageSelector dialog) { return new DriverViewAdapter(this); }
     protected void onPositive(Context context, ActivityResultLauncher<Object> launcher) {
