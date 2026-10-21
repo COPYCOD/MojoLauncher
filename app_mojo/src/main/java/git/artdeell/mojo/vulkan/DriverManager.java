@@ -27,7 +27,7 @@ import java.util.zip.ZipInputStream;
  */
 public class DriverManager {
     private static final String METADATA_FILENAME = "meta.json";
-    public static final String TAG = "AdrenoTools";
+    public static final String TAG = "DriverManager";
     public static final BuiltinDriver DEFAULT_DRIVER = new BuiltinDriver();
     // Must be in the exec place, /sdcard/... is noexec
     private static final File packagesPath = new File(Tools.DIR_DATA, "vulkan-drivers");
