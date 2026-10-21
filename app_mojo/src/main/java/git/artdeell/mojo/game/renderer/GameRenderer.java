@@ -162,6 +162,6 @@ public class GameRenderer {
         // In most cases we load Turnip so use Turnip environment variables
         if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) environment.put("TU_DEBUG", "sysmem");
         if(LauncherPreferences.PREF_UBWC_WORKAROUND) environment.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");
-        MojoExec.setUseTurnip(true);
+        MojoExec.configureCustomVulkanDriver("libvulkan_freedreno.so", null);
     }
 }
