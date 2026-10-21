@@ -36,7 +36,7 @@ public class RTRecyclerViewAdapter extends PackageAdapter<RTRecyclerViewAdapter.
         notifyDataSetChanged();
     }
 
-    public class RTViewHolder extends AbstractHolder<Runtime> {
+    public class RTViewHolder extends AbstractHolder<Runtime> implements View.OnClickListener {
         Runtime mCurrentRuntime;
         int mCurrentPosition;
 
@@ -53,33 +53,7 @@ public class RTRecyclerViewAdapter extends PackageAdapter<RTRecyclerViewAdapter.
                     RTRecyclerViewAdapter.this.notifyDataSetChanged();
                 }
             });
-
-            mDeleteButton.setOnClickListener(v -> {
-                if (mCurrentRuntime == null) return;
-
-                if(MultiRTUtils.getRuntimes().size() < 2) {
-                    new AlertDialog.Builder(mContext)
-                            .setTitle(R.string.global_error)
-                            .setMessage(R.string.multirt_config_removeerror_last)
-                            .setPositiveButton(android.R.string.ok,(adapter, which)->adapter.dismiss())
-                            .show();
-                    return;
-                }
-
-                sExecutorService.execute(() -> {
-                    try {
-                        MultiRTUtils.removeRuntimeNamed(mCurrentRuntime.name);
-                        mDeleteButton.post(() -> {
-                            if(getBindingAdapter() != null)
-                                getBindingAdapter().notifyDataSetChanged();
-                        });
-
-                    } catch (IOException e) {
-                        Tools.showError(itemView.getContext(), e);
-                    }
-                });
-
-            });
+            mDeleteButton.setOnClickListener(this);
         }
 
         public void bind(Runtime runtime, int pos) {
@@ -115,6 +89,33 @@ public class RTRecyclerViewAdapter extends PackageAdapter<RTRecyclerViewAdapter.
         private void updateButtonsVisibility(){
             mSetDefaultButton.setVisibility(isEditing() ? View.GONE : View.VISIBLE);
             mDeleteButton.setVisibility(isEditing() ? View.VISIBLE : View.GONE);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mCurrentRuntime == null) return;
+
+            if(MultiRTUtils.getRuntimes().size() < 2) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.global_error)
+                        .setMessage(R.string.multirt_config_removeerror_last)
+                        .setPositiveButton(android.R.string.ok,(adapter, which)->adapter.dismiss())
+                        .show();
+                return;
+            }
+
+            sExecutorService.execute(() -> {
+                try {
+                    MultiRTUtils.removeRuntimeNamed(mCurrentRuntime.name);
+                    mDeleteButton.post(() -> {
+                        if(getBindingAdapter() != null)
+                            getBindingAdapter().notifyDataSetChanged();
+                    });
+
+                } catch (IOException e) {
+                    Tools.showError(itemView.getContext(), e);
+                }
+            });
         }
     }
 }

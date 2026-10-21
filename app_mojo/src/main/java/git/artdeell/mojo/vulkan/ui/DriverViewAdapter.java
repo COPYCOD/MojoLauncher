@@ -56,7 +56,7 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
         DriverManager.setPreferredDriver(driver);
     }
 
-    public class DriverViewHolder extends PackageAdapter.AbstractHolder<String> {
+    public class DriverViewHolder extends PackageAdapter.AbstractHolder<String> implements View.OnClickListener {
         Driver mCurrentDriver;
         int mCurrentPosition;
 
@@ -74,23 +74,7 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
                 }
             });
 
-            mDeleteButton.setOnClickListener(v -> {
-                if (mCurrentDriver != null && mCurrentDriver.isDefault()) return;
-
-
-                sExecutorService.execute(() -> {
-                    boolean state = DriverManager.removeDriver(mCurrentDriver.getHash());
-                    mDeleteButton.post(() -> {
-                        if(!state) {
-                            Toast.makeText(mContext, R.string.driver_config_remove_failed, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if(getBindingAdapter() != null)
-                            getBindingAdapter().notifyDataSetChanged();
-                    });
-                });
-
-            });
+            mDeleteButton.setOnClickListener(this);
         }
 
         @SuppressLint("SetTextI18n")
@@ -124,6 +108,21 @@ public class DriverViewAdapter extends PackageAdapter<DriverViewAdapter.DriverVi
         private void updateButtonsVisibility(){
             mSetDefaultButton.setVisibility(isEditing() ? View.GONE : View.VISIBLE);
             mDeleteButton.setVisibility(isEditing() ? View.VISIBLE : View.GONE);
+        }
+
+        private void afterDelete(boolean deleted) {
+            if(!deleted) {
+                Toast.makeText(mContext, R.string.driver_config_remove_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(getBindingAdapter() != null) getBindingAdapter().notifyDataSetChanged();
+        }
+
+        // Set default
+        @Override
+        public void onClick(View v) {
+            if (mCurrentDriver != null && mCurrentDriver.isDefault()) return;
+            sExecutorService.execute(() -> mDeleteButton.post(() -> afterDelete(DriverManager.removeDriver(mCurrentDriver.getHash()))));
         }
     }
 }
