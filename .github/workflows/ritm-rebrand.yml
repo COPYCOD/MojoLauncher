@@ -1,0 +1,69 @@
+name: Ritm rebrand
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebrand:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Замінити назву в текстах інтерфейсу
+        run: |
+          find app_mojo/src/main/res -path '*/values*' -name '*.xml' -print0 | xargs -0 perl -CSD -pi -e 's/(?<![\/.\w@-])(?:MojoLauncher|Mojo Launcher|MJLauncher)(?![\w\/-])/Ritm Launcher/g; s/(?<![\/.\w@-])Mojo(?![\w\/-])/Ritm/g'
+          for f in GPLAY_PRIVACY_POLICY.md PRIVACY_POLICY_ru.md dataremoval.md; do
+            [ -f "$f" ] && perl -CSD -pi -e 's/(?<![\/.\w@-])(?:MojoLauncher|Mojo Launcher|MJLauncher)(?![\w\/-])/Ritm Launcher/g; s/(?<![\/.\w@-])Mojo(?![\w\/-])/Ritm/g' "$f"
+          done
+          git rm -q --ignore-unmatch README_RU.md
+
+      - name: Новий README
+        run: |
+          cat > README.md <<'EOF'
+          # Ritm Launcher
+
+          Твій Minecraft. Твій ритм.
+
+          Ritm Launcher — лаунчер Minecraft: Java Edition для Android.
+          Файли гри завантажуються з офіційних серверів Mojang. Проєкт не афілійований з Mojang чи Microsoft.
+
+          ## Збірка
+
+          ./gradlew :app_mojo:assembleDebug
+
+          ## Ліцензія та подяки
+
+          Ritm Launcher є форком MojoLauncher, що базується на PojavLauncher.
+          Поширюється за ліцензією GNU LGPL-3.0 (файл LICENSE). Авторські права
+          й примітки оригінальних авторів збережено.
+
+          - MojoLauncher: https://github.com/MojoLauncher/MojoLauncher
+          - PojavLauncher: https://github.com/PojavLauncherTeam/PojavLauncher
+          - Holy GL4ES (MIT), LWJGL3 (BSD-3), OpenJDK (GPLv2 + Classpath Exception),
+            GLFW і SDL (zlib), Mesa 3D (MIT), OpenAL Soft (LGPL), Oboe (Apache-2.0)
+          EOF
+          sed -i 's/^          //' README.md
+
+      - name: Звіт про те, що залишилось
+        run: |
+          {
+            echo "== res / manifest / gradle =="
+            grep -rnIiE "mojo|mjlaunch" app_mojo/src/main/res app_mojo/src/main/AndroidManifest.xml app_mojo/build.gradle 2>/dev/null || true
+            echo
+            echo "== assets (файли) =="
+            grep -rlIiE "mojo" app_mojo/src/main/assets 2>/dev/null || true
+            echo
+            echo "== текстові літерали в Java/Kotlin =="
+            grep -rnIE '"[^"]*Mojo[^"]*"' app_mojo/src/main/java 2>/dev/null | head -150 || true
+          } > RITM_REBRAND_REPORT.txt
+
+      - name: Закомітити
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Rebrand user-visible text to Ritm Launcher"
+          git push
