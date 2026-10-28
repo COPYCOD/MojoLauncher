@@ -1,0 +1,50 @@
+name: Ritm apply UI
+
+on:
+  push:
+    paths:
+      - 'ritm-ui.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Застосувати ritm-ui.zip у гілку ritm-ui
+        run: |
+          test -f ritm-ui.zip || { echo "ritm-ui.zip не знайдено"; exit 1; }
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          unzip -o ritm-ui.zip -x ".github/*" "__MACOSX/*"
+          rm ritm-ui.zip
+          git add -A
+          git commit -m "Apply Ritm UI patch"
+          git push origin HEAD:refs/heads/ritm-ui --force
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Прийняти ліцензії Android SDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Збірка APK
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app_mojo:assembleFullDebug --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ritm-ui-apk
+          path: app_mojo/build/outputs/apk/**/*.apk
