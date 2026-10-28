@@ -1,0 +1,92 @@
+== res / manifest / gradle ==
+app_mojo/src/main/res/values-ru/strings.xml:372:    <string name="social_media_invite" translatable="false">https://t.me/MojoLauncher</string>
+app_mojo/src/main/res/layout-land/dialog_cropper.xml:12:        <git.artdeell.mojo.imgcropper.CropperView
+app_mojo/src/main/res/layout-land/activity_mojo_ui.xml:36:        android:name="git.artdeell.mojo.fragments.MainMenuFragment"
+app_mojo/src/main/res/values-bn-rBD/strings.xml:361:    <string name="notification_permission_dialog_text">MJLauncher-কে নোটিফিকেশন অনুমতি দিতে হবে যাতে অ্যাপ ছেড়ে গেলে গেম/মডপ্যাক ডাউনলোড বন্ধ না হয়। অনুমতি ছাড়া, Android ব্যাকগ্রাউন্ডে ডাউনলোড বন্ধ করে দিতে পারে।</string>
+app_mojo/src/main/res/xml/pref_experimental.xml:4:    <git.artdeell.mojo.prefs.BackButtonPreference />
+app_mojo/src/main/res/xml/pref_misc.xml:5:    <git.artdeell.mojo.prefs.BackButtonPreference />
+app_mojo/src/main/res/xml/pref_misc.xml:50:        <git.artdeell.mojo.prefs.ClearPartfileCachePreference
+app_mojo/src/main/res/xml/pref_main.xml:10:    <git.artdeell.mojo.prefs.BackButtonPreference />
+app_mojo/src/main/res/xml/pref_main.xml:20:            android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceVideoFragment"
+app_mojo/src/main/res/xml/pref_main.xml:28:            android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceControlFragment"
+app_mojo/src/main/res/xml/pref_main.xml:36:            android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceJavaFragment"
+app_mojo/src/main/res/xml/pref_main.xml:44:            android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceMiscellaneousFragment"
+app_mojo/src/main/res/xml/pref_main.xml:53:            android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceExperimentalFragment"
+app_mojo/src/main/res/xml/pref_control.xml:5:    <git.artdeell.mojo.prefs.BackButtonPreference />
+app_mojo/src/main/res/xml/pref_control.xml:12:        <intent android:targetPackage="@string/application_package" android:targetClass="git.artdeell.mojo.CustomControlsActivity" android:action=".CustomControlsActivity"/>
+app_mojo/src/main/res/xml/pref_control.xml:32:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:49:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:60:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:83:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:96:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:121:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:130:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_control.xml:161:            android:fragment="git.artdeell.mojo.fragments.GamepadMapperFragment"/>
+app_mojo/src/main/res/xml/pref_control.xml:162:        <git.artdeell.mojo.prefs.GamepadRemapPreference
+app_mojo/src/main/res/xml/pref_control.xml:166:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_video.xml:5:    <git.artdeell.mojo.prefs.BackButtonPreference />
+app_mojo/src/main/res/xml/pref_video.xml:23:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/xml/pref_java.xml:5:    <git.artdeell.mojo.prefs.BackButtonPreference />
+app_mojo/src/main/res/xml/pref_java.xml:23:        <git.artdeell.mojo.prefs.CustomSeekBarPreference
+app_mojo/src/main/res/values/styles.xml:13:        <item name="android:seekBarStyle">@style/MojoLauncher.SeekBar</item>
+app_mojo/src/main/res/values/styles.xml:14:        <item name="seekBarStyle">@style/MojoLauncher.SeekBar</item>
+app_mojo/src/main/res/values/styles.xml:15:        <item name="android:switchStyle">@style/MojoLauncher.Switch</item>
+app_mojo/src/main/res/values/styles.xml:16:        <item name="switchStyle">@style/MojoLauncher.Switch</item>
+app_mojo/src/main/res/values/styles.xml:17:        <item name="buttonStyle">@style/MojoLauncher.Button</item>
+app_mojo/src/main/res/values/styles.xml:18:        <item name="android:buttonStyleToggle">@style/MojoLauncher.Button.Toggle</item>
+app_mojo/src/main/res/values-uk/strings.xml:380:    <string name="social_media_invite" translatable="false">https://t.me/MojoLauncher</string>
+app_mojo/src/main/res/values-ko/strings.xml:16:    <string name="error_fatal">MJLauncher에 예기치 못한 충돌이 발생했어요</string>
+app_mojo/src/main/res/values-ko/strings.xml:310:    <string name="notification_permission_dialog_text">MJLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MJLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
+app_mojo/src/main/res/layout/dialog_cropper.xml:8:    <git.artdeell.mojo.imgcropper.CropperView
+app_mojo/src/main/res/layout/activity_mojo_ui.xml:37:        android:name="git.artdeell.mojo.fragments.MainMenuFragment"
+app_mojo/src/main/res/layout/activity_java_gui_launcher.xml:14:		<git.artdeell.mojo.input.keyboard.TouchCharInput
+app_mojo/src/main/res/layout/activity_java_gui_launcher.xml:25:		<git.artdeell.mojo.awt.AWTView
+app_mojo/src/main/res/layout/activity_custom_controls.xml:17:		<git.artdeell.mojo.input.handleview.DrawerPullButton
+app_mojo/src/main/res/layout/activity_custom_controls.xml:35:		<git.artdeell.mojo.input.ControlLayout
+app_mojo/src/main/res/layout/activity_custom_controls.xml:40:		</git.artdeell.mojo.input.ControlLayout>
+app_mojo/src/main/res/layout/dialog_color_selector.xml:16:    <git.artdeell.mojo.colorselector.SVRectangleView
+app_mojo/src/main/res/layout/dialog_color_selector.xml:27:    <git.artdeell.mojo.colorselector.ColorSideBySideView
+app_mojo/src/main/res/layout/dialog_color_selector.xml:52:    <git.artdeell.mojo.colorselector.AlphaView
+app_mojo/src/main/res/layout/dialog_color_selector.xml:61:    <git.artdeell.mojo.colorselector.HueView
+app_mojo/src/main/res/layout/activity_basemain.xml:18:		<git.artdeell.mojo.input.ControlLayout
+app_mojo/src/main/res/layout/activity_basemain.xml:23:			<git.artdeell.mojo.game.GameView
+app_mojo/src/main/res/layout/activity_basemain.xml:32:				<git.artdeell.mojo.game.GameCursorView
+app_mojo/src/main/res/layout/activity_basemain.xml:42:			</git.artdeell.mojo.game.GameView>
+app_mojo/src/main/res/layout/activity_basemain.xml:45:			<git.artdeell.mojo.input.keyboard.TouchCharInput
+app_mojo/src/main/res/layout/activity_basemain.xml:55:			<git.artdeell.mojo.input.handleview.DrawerPullButton
+app_mojo/src/main/res/layout/activity_basemain.xml:62:			<git.artdeell.mojo.input.mouse.HotbarView
+app_mojo/src/main/res/layout/activity_basemain.xml:67:		</git.artdeell.mojo.input.ControlLayout>
+app_mojo/src/main/res/values-az-rAZ/strings.xml:309:    <string name="notification_permission_dialog_text">Ritm Launcher, proqramı tərk etdiyiniz zaman oyun/mod paketi yükləmələrinin dayandırılmasının qarşısını almaq məqsədilə bildirişlər göndərmək üçün icazə tələb edir. Bu icazə olmadan MJLauncher-i fon rejiminə keçirdiyiniz zaman Android, yükləmələrinizi bağlaya bilər.</string>
+app_mojo/src/main/AndroidManifest.xml:29:        android:name=".MojoApplication"
+app_mojo/src/main/AndroidManifest.xml:40:        android:theme="@style/MojoLauncher.AppTheme"
+app_mojo/src/main/AndroidManifest.xml:141:        <package android:name="git.mojo.ffmpeg"/>
+app_mojo/src/main/AndroidManifest.xml:142:        <package android:name="git.mojo.angle"/>
+app_mojo/src/main/AndroidManifest.xml:143:        <package android:name="git.mojo.zink"/>
+app_mojo/src/main/AndroidManifest.xml:144:        <package android:name="git.mojo.mesa"/>
+app_mojo/src/main/AndroidManifest.xml:145:        <package android:name="git.artdeell.mojo"/>
+app_mojo/src/main/AndroidManifest.xml:146:        <package android:name="git.artdeell.mojo.debug"/>
+app_mojo/src/main/AndroidManifest.xml:147:        <package android:name="git.artdeell.mojo.pub"/>
+app_mojo/build.gradle:51:    namespace 'git.artdeell.mojo'
+app_mojo/build.gradle:67:            storeFile file("mojo_upload_next.jks")
+app_mojo/build.gradle:73:            storeFile file("mojo_release_next.jks")
+app_mojo/build.gradle:74:            storePassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+app_mojo/build.gradle:76:            keyPassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+app_mojo/build.gradle:81:        applicationId "git.artdeell.mjlaunch"
+app_mojo/build.gradle:111:            resValue 'string', 'application_package', 'git.artdeell.mjlaunch.debug'
+app_mojo/build.gradle:112:            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder.debug'
+app_mojo/build.gradle:132:            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder'
+app_mojo/build.gradle:133:            resValue 'string', 'application_package', 'git.artdeell.mjlaunch'
+app_mojo/build.gradle:286:        def jreUrl = "https://github.com/MojoLauncher/android-openjdk-build-multiarch/releases/download/rolling/jre%d-pojav.zip"
+app_mojo/build.gradle:304:		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
+app_mojo/build.gradle:340:    implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
+
+== assets (файли) ==
+app_mojo/src/main/assets/components/security/java_sandbox.policy
+app_mojo/src/main/assets/substitutions.json
+
+== текстові літерали в Java/Kotlin ==
+app_mojo/src/main/java/git/artdeell/mojo/utils/jre/GameRunner.java:304:        javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
+app_mojo/src/main/java/git/artdeell/mojo/utils/maven/MavenName.java:88:        Log.i("MojoLauncher", "Path:"+path);
+app_mojo/src/main/java/git/artdeell/mojo/Tools.java:93:    public static String APP_NAME = "MojoLauncher";
+app_mojo/src/main/java/git/artdeell/mojo/game/GameActivity.java:249:            setTitle("MojoLauncher (" + version + ")");
+app_mojo/src/main/java/git/artdeell/mojo/MojoApplication.java:34:	public static final String CRASH_REPORT_TAG = "MojoCrashReport";

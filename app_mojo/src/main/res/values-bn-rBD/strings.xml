@@ -21,7 +21,7 @@
     <string name="alerttitle_installmod">একটি মোড ইনস্টলার নির্বাচন করুন</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MJLauncher অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
+    <string name="error_fatal">Ritm Launcher অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
     <string name="error_no_version">>কোন ভার্সন নেই!</string>
     <string name="error_show_more">আরো দেখুন</string>
     <string name="error_show_less">কম দেখান</string>
@@ -269,7 +269,7 @@
     <string name="preference_gyro_sample_rate_title">জাইরোস্কোপ স্যাম্পলিং রেট</string>
     <string name="preference_gyro_sample_rate_description">জাইরোস্কোপ কন্ট্রোলে পারফরম্যান্স সমস্যা হলে এটি বাড়ান।</string>
     <string name="microsoft_login_retry_later">অনেক অনুরোধ করা হয়েছে, অনুগ্রহ করে পরে চেষ্টা করুন।</string>
-    <string name="storage_required">MJLauncher চালানোর জন্য এক্সটার্নাল স্টোরেজ সংযুক্ত করতে হবে। পুনরায় সংযুক্ত করে অ্যাপ রিস্টার্ট করুন।</string>
+    <string name="storage_required">Ritm Launcher চালানোর জন্য এক্সটার্নাল স্টোরেজ সংযুক্ত করতে হবে। পুনরায় সংযুক্ত করে অ্যাপ রিস্টার্ট করুন।</string>
     <string name="mcl_setting_title_buttonallcaps">বোতামের লেবেলে কেবল বড় হাতের অক্ষর ব্যবহার করুন</string>
     <string name="mcl_setting_subtitle_buttonallcaps">ছোট হাতের অক্ষর ব্যবহার করতে এটি বন্ধ করুন।</string>
     <string name="create_instance">নতুন ইনস্ট্যান্স তৈরি করুন</string>
