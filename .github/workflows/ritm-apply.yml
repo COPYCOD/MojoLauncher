@@ -3,7 +3,7 @@ name: Ritm apply UI
 on:
   push:
     paths:
-      - 'ritm-ui.zip'
+      - '*.zip'
   workflow_dispatch:
 
 permissions:
@@ -18,13 +18,20 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Застосувати ritm-ui.zip у гілку ritm-ui
+      - name: Застосувати найновіший zip у гілку ritm-ui
         run: |
-          test -f ritm-ui.zip || { echo "ritm-ui.zip не знайдено"; exit 1; }
+          latest=""; latest_t=0
+          for z in *.zip; do
+            [ -f "$z" ] || continue
+            t=$(git log -1 --format=%ct -- "$z")
+            if [ "$t" -ge "$latest_t" ]; then latest="$z"; latest_t="$t"; fi
+          done
+          [ -n "$latest" ] || { echo "У корені немає .zip"; exit 1; }
+          echo "Застосовую: $latest"
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          unzip -o ritm-ui.zip -x ".github/*" "__MACOSX/*"
-          rm ritm-ui.zip
+          unzip -o "$latest" -x ".github/*" "__MACOSX/*"
+          rm -f ./*.zip
           git add -A
           git commit -m "Apply Ritm UI patch"
           git push origin HEAD:refs/heads/ritm-ui --force
