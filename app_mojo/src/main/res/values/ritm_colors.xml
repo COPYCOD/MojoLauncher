@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ritm_accent">#793CFB</color>
+    <color name="ritm_accent2">#3C91FC</color>
+    <color name="ritm_accent_dark">#3C91FC</color>
+    <color name="ritm_accent_light">#7FA6FF</color>
+    <color name="ritm_surface">#0A1322</color>
+    <color name="ritm_card_inner">#0C1628</color>
+    <color name="ritm_outline">#16233B</color>
+    <color name="ritm_hero">#071024</color>
+    <color name="ritm_hero_start">#071024</color>
+    <color name="ritm_sidebar">#040A15</color>
+    <color name="ritm_text2">#8A99B8</color>
+    <color name="ritm_blue">#4C8DFF</color>
+</resources>

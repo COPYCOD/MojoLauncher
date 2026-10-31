@@ -1,54 +1,314 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@color/background_app"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
 
-    <com.kdt.mcgui.AccountSpinner
-        android:id="@+id/account_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_52sdp"
+    <!-- Бічна панель -->
+    <LinearLayout
+        android:id="@+id/ritm_sidebar"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="283"
+        android:background="@color/ritm_sidebar"
+        android:orientation="vertical"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
 
-        android:dropDownWidth="@dimen/_250sdp"
-        android:dropDownVerticalOffset="@dimen/_52sdp"
-        android:paddingEnd="@dimen/_52sdp"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:scaleType="fitStart"
+            android:src="@drawable/ritm_logo" />
 
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RtlSymmetry" />
-    <!-- Ignore because it's  done to fit the ImageButton within spinner background -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:id="@+id/nav_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_home"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_home"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/nav_accounts"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_person"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_accounts"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/nav_builds"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_grid"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_builds"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/nav_versions"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_layers"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_versions"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/nav_mods"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_extension"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_mods"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/nav_shaders"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_sparkles"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_shaders"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/nav_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ritm_nav_item"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_ritm_settings"
+                    android:drawablePadding="9dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/ritm_nav_settings"
+                    android:textColor="@color/ritm_nav_text"
+                    android:textSize="10.5dp"
+                    android:textStyle="bold"
+                    tools:ignore="SpUsage" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ritm_brand" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#0E1830" />
+
+    <!-- Основна частина -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1587"
+        android:orientation="vertical">
+
+        <!-- Верхня панель -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="10dp">
+
+            <LinearLayout
+                android:id="@+id/top_search"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="564"
+                android:background="@drawable/ritm_search_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_ritm_search"
+                    android:tint="@color/ritm_text2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="@string/ritm_search_hint"
+                    android:textColor="@color/ritm_text2"
+                    android:textSize="8.5dp"
+                    tools:ignore="SpUsage" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="900" />
+
+            <ImageView
+                android:id="@+id/top_bell"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:padding="5dp"
+                android:src="@drawable/ic_ritm_bell"
+                android:tint="#B8C4E0" />
+
+            <ImageView
+                android:id="@+id/top_gear"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:padding="5dp"
+                android:src="@drawable/ic_ritm_settings"
+                android:tint="#B8C4E0" />
+
+            <!-- Реальний вибір акаунта (потрібен коду входу); приховано, відкривається з картки акаунта -->
+            <com.kdt.mcgui.AccountSpinner
+                android:id="@+id/account_spinner"
+                android:layout_width="1dp"
+                android:layout_height="26dp"
+                android:alpha="0"
+                android:dropDownHorizontalOffset="-250dp"
+                android:dropDownWidth="260dp"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/container_fragment"
+            android:name="git.artdeell.mojo.fragments.MainMenuFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.kdt.mcgui.ProgressLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Потрібен коду LauncherActivity; приховано -->
     <ImageButton
         android:id="@+id/setting_button"
-        android:layout_width="@dimen/_52sdp"
-        android:layout_height="@dimen/_52sdp"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_px_sliders"
-        android:scaleType="fitCenter"
-        android:paddingVertical="@dimen/_8sdp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Holding most of the dynamic content -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container_fragment"
-        android:name="git.artdeell.mojo.fragments.MainMenuFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/progress_layout"
-        app:layout_constraintTop_toBottomOf="@+id/account_spinner" />
-
-
-    <com.kdt.mcgui.ProgressLayout
-        android:id="@+id/progress_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:contentDescription="@null"
+        android:visibility="gone" />
+</LinearLayout>

@@ -120,6 +120,14 @@ public class GameRunner {
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
     }
 
+    private static boolean showDialogText(AppCompatActivity activity, String message) throws InterruptedException {
+        LifecycleAwareAlertDialog.DialogCreator dialogCreator = ((alertDialog, dialogBuilder) ->
+                dialogBuilder.setMessage(message)
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, (d, w)->{}));
+        return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
+    }
+
     private static boolean showDialog(AppCompatActivity activity, int message) throws InterruptedException {
         LifecycleAwareAlertDialog.DialogCreator dialogCreator = ((alertDialog, dialogBuilder) ->
                 dialogBuilder.setMessage(activity.getString(message))
@@ -140,7 +148,23 @@ public class GameRunner {
             instance.write();
             gameRenderer.setCurrentRenderer(renderer);
         }else {
-            showDialog(activity, resId);
+            // Ritm: показуємо причину, щоб зрозуміти, чому LTW недоступний
+            StringBuilder libs = new StringBuilder();
+            String[] libNames = new File(Tools.NATIVE_LIB_DIR).list();
+            if(libNames != null) {
+                for(String libName : libNames) {
+                    if(libName.contains("ltw") || libName.contains("gl4es") || libName.contains("angle")
+                            || libName.contains("mojoexec") || libName.contains("egl")) {
+                        libs.append(libName).append(' ');
+                    }
+                }
+            }
+            String reason = "GLES: " + JREUtils.getDetectedVersion()
+                    + "\nlibltw.so: " + new File(Tools.NATIVE_LIB_DIR, "libltw.so").exists()
+                    + "\nABI: " + android.os.Build.SUPPORTED_ABIS[0]
+                    + "\nLibs: " + libs;
+            Log.e("RitmLTW", reason);
+            showDialogText(activity, activity.getString(resId) + "\n\n" + reason);
             System.exit(0);
         }
     }

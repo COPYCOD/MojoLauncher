@@ -29,7 +29,10 @@ import git.artdeell.mojo.authenticator.accounts.Accounts;
 import git.artdeell.mojo.extra.ExtraConstants;
 import git.artdeell.mojo.extra.ExtraCore;
 import git.artdeell.mojo.extra.ExtraListener;
+import git.artdeell.mojo.fragments.InstanceEditorFragment;
 import git.artdeell.mojo.fragments.MainMenuFragment;
+import git.artdeell.mojo.fragments.ProfileTypeSelectFragment;
+import git.artdeell.mojo.fragments.SearchModFragment;
 import git.artdeell.mojo.fragments.MicrosoftLoginFragment;
 import git.artdeell.mojo.fragments.SelectAuthFragment;
 import git.artdeell.mojo.instances.Instance;
@@ -64,6 +67,7 @@ public class LauncherActivity extends BaseActivity {
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
                     ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+            setActiveNav(f);
         }
     };
 
@@ -327,5 +331,91 @@ public class LauncherActivity extends BaseActivity {
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
+        bindRitmNav();
+    }
+
+    private static final int[] RITM_NAV_IDS = {
+            R.id.nav_home, R.id.nav_accounts, R.id.nav_builds,
+            R.id.nav_versions, R.id.nav_mods, R.id.nav_settings
+    };
+
+    private static final String RITM_URL_NEWS = "https://www.minecraft.net/en-us/articles";
+    private static final String RITM_URL_SHADERS = "https://modrinth.com/shaders";
+
+    /** Ritm: прив'язка бічної навігації та верхньої панелі */
+    private void bindRitmNav() {
+        for(int id : RITM_NAV_IDS) {
+            View item = findViewById(id);
+            if(item != null) item.setOnClickListener(v -> ritmNavigate(id));
+        }
+        bindRitmClick(R.id.nav_shaders, v -> ritmNavigate(R.id.nav_shaders));
+        bindRitmClick(R.id.top_search, v -> ritmNavigate(R.id.nav_versions));
+        bindRitmClick(R.id.top_gear, v -> ritmNavigate(R.id.nav_settings));
+        bindRitmClick(R.id.top_bell, v -> Tools.openURL(this, RITM_URL_NEWS));
+        setActiveNav(R.id.nav_home);
+    }
+
+    private void bindRitmClick(int id, View.OnClickListener listener) {
+        View target = findViewById(id);
+        if(target != null) target.setOnClickListener(listener);
+    }
+
+    /** Ritm: відкрити випадаючий список акаунтів (справжній AccountSpinner приховано) */
+    public void openAccountPicker() {
+        View spinner = findViewById(R.id.account_spinner);
+        if(spinner != null) spinner.performClick();
+    }
+
+    /** Ritm: перехід на екран з бічної панелі або з головної сторінки */
+    public void ritmNavigate(int navId) {
+        if(navId == R.id.nav_shaders) {
+            Tools.openURL(this, RITM_URL_SHADERS);
+            return;
+        }
+        FragmentManager manager = getSupportFragmentManager();
+        if(manager.isStateSaved()) return;
+        Class<? extends Fragment> target;
+        String tag;
+        if(navId == R.id.nav_accounts) {
+            target = SelectAuthFragment.class;
+            tag = SelectAuthFragment.TAG;
+        } else if(navId == R.id.nav_builds) {
+            target = ProfileTypeSelectFragment.class;
+            tag = ProfileTypeSelectFragment.TAG;
+        } else if(navId == R.id.nav_versions) {
+            target = InstanceEditorFragment.class;
+            tag = InstanceEditorFragment.TAG;
+        } else if(navId == R.id.nav_mods) {
+            target = SearchModFragment.class;
+            tag = SearchModFragment.TAG;
+        } else if(navId == R.id.nav_settings) {
+            target = LauncherPreferenceFragment.class;
+            tag = SETTING_FRAGMENT_TAG;
+        } else {
+            manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            setActiveNav(R.id.nav_home);
+            return;
+        }
+        manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Tools.swapFragment(this, target, tag, null);
+        setActiveNav(navId);
+    }
+
+    private void setActiveNav(Fragment f) {
+        int id = 0;
+        if(f instanceof MainMenuFragment) id = R.id.nav_home;
+        else if(f instanceof SelectAuthFragment) id = R.id.nav_accounts;
+        else if(f instanceof ProfileTypeSelectFragment) id = R.id.nav_builds;
+        else if(f instanceof InstanceEditorFragment) id = R.id.nav_versions;
+        else if(f instanceof SearchModFragment) id = R.id.nav_mods;
+        else if(f instanceof LauncherPreferenceFragment) id = R.id.nav_settings;
+        if(id != 0) setActiveNav(id);
+    }
+
+    private void setActiveNav(int activeId) {
+        for(int id : RITM_NAV_IDS) {
+            View item = findViewById(id);
+            if(item != null) item.setSelected(id == activeId);
+        }
     }
 }
